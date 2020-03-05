@@ -18,7 +18,10 @@ namespace ConsoleApp1
         
         public static string devicesXml()
         {
+
+            //THIS IS YOUR PATH TO THE NODE IN TH XML YOU WOULD LIKE TO EDIT
             string path = "/Devices.xml/DetailData/Devices/Device";
+
 
             RootObject account = JsonConvert.DeserializeObject<RootObject>(getData());
 
@@ -26,15 +29,18 @@ namespace ConsoleApp1
 
             string xml = @"dataSets\devices" + devices.Count.ToString() +".xml";
             
-            //Create the XmlDocument.
+            //CREATES XML DOCUMENT USING XMLDOCUMENT, POSSIBLY TRY STREAM METHOD.
             XmlDocument doc = new XmlDocument();
             doc.Load(xml);
 
+            //SELECTIG THE NODES TO EDIT WITHIN THE XML, ACCORDING TO PATH ABOVE.
             XmlNodeList nodes = doc.SelectNodes(path);
 
             //Display all the book titles
             for (int i = 0; i < devices.Count; i++)
             {
+
+                //THIS IS THE LOOP THAT MANIPULATES THE DATA IN THE XML FROM THE LIST RETRIEVED FROM API
                 //Device Details
                nodes[i]["Description"].InnerText = devices[i].decription;
                nodes[i]["DeviceID"].InnerText = devices[i].deviceId;
@@ -56,6 +62,8 @@ namespace ConsoleApp1
             return "";
         }
 
+
+        //DO NOT NEED, THIS IS A WORK IN PROGRESS BY NICK!!
         public static void csNetwork()
         {
             string path = "/ConnectSmartNetwork.xml/DetailData/NetworkConfigurations/NetworkConfiguration";
@@ -98,9 +106,12 @@ namespace ConsoleApp1
             request.AddParameter("application/javascript", "", ParameterType.RequestBody);
             IRestResponse response = client.Execute(request);
 
-            
+
             //Console.WriteLine(account._id);
 
+            //YOU WANT TO USE THIS OBJECT AS THE DATA YOU MANIPULATE INTO THE XML FILE. 
+            //THIS IS FROM THE API.
+            RootObject account = JsonConvert.DeserializeObject<RootObject>(response.Content);
             return response.Content;
             
         }
@@ -109,9 +120,10 @@ namespace ConsoleApp1
 
         static void Main(string[] args)
         {
+            getData();
             //RestartWindowsService();
-            devicesXml();
-            csNetwork();
+            //devicesXml();
+            //csNetwork();
         }
     }
 }
