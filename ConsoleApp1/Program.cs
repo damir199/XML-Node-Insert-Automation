@@ -27,7 +27,7 @@ namespace ConsoleApp1
 
             var devices = new List<Device>(account.devices);
 
-            string xml = @"dataSets\devices" + devices.Count.ToString() +".xml";
+            string xml = @"C:\ProgramData\QSR Automation\ConnectSmart\ControlPointServer\Data\Devices1.xml";
             
             //CREATES XML DOCUMENT USING XMLDOCUMENT, POSSIBLY TRY STREAM METHOD.
             XmlDocument doc = new XmlDocument();
@@ -52,7 +52,8 @@ namespace ConsoleApp1
                 nodes[i]["Network"]["DefaultGateway"].InnerText = devices[i].defaultGateway;
                 nodes[i]["Network"]["PrimaryDNS"].InnerText = devices[i].primaryDns;
 
-                Console.WriteLine("XML Updated");
+                return nodes.ToString();
+                //Console.WriteLine("XML Updated");
             }
 
 
@@ -112,7 +113,10 @@ namespace ConsoleApp1
             //YOU WANT TO USE THIS OBJECT AS THE DATA YOU MANIPULATE INTO THE XML FILE. 
             //THIS IS FROM THE API.
             RootObject account = JsonConvert.DeserializeObject<RootObject>(response.Content);
+            //Console.WriteLine(response.Content.ToString());
+            //return "";
             return response.Content;
+            
             
         }
 
@@ -120,7 +124,8 @@ namespace ConsoleApp1
 
         static void Main(string[] args)
         {
-            getData();
+            devicesXml();
+            //getData();
             //RestartWindowsService();
             //devicesXml();
             //csNetwork();
