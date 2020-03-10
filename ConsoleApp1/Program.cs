@@ -15,6 +15,18 @@ namespace ConsoleApp1
 {
     class Program
     {
+
+        public static void demofunc()
+        {
+            RootObject account = JsonConvert.DeserializeObject<RootObject>(getData());
+            XDocument xmlDocument = XDocument.Load(@"C:\ProgramData\QSR Automation\ConnectSmart\ControlPointServer\Data\Devices1.xml");
+            var devices = new List<Device>(account.devices);
+
+            xmlDocument.Element("Devices").Add(
+                new XElement("Device")
+                
+                );
+        }
         
         public static string devicesXml()
         {
@@ -124,7 +136,8 @@ namespace ConsoleApp1
 
         static void Main(string[] args)
         {
-            devicesXml();
+            demofunc();
+            //devicesXml();
             //getData();
             //RestartWindowsService();
             //devicesXml();
