@@ -24,23 +24,32 @@ namespace ConsoleApp1
             var devices = new List<Device>(account.devices);
 
             var elDevice = xmlDocument.Descendants().First(d => d.Name == "Device");
+            var elDeviceNetwork = xmlDocument.Descendants().First(n => n.Name == "Network");
 
             for (int i = 0; i < devices.Count; i++)
             {
                 XElement el = new XElement(elDevice);
                 el.Element("DeviceID").Value = devices[i].deviceId;
-                el.Element("Description").Value = devices[i].description;
+                el.Element("Description").Value = devices[i].decription;
                 el.Element("DeviceType").Value = devices[i].deviceType;
-                /**
-                el.Element("IPAddress").Value = devices[i].ipAddress;
-                el.Element("SubnetMask").Value = devices[i].subnetMask;
-                el.Element("DefaultGateway").Value = devices[i].defaultGateway;
-                el.Element("PrimaryDNS").Value = devices[i].primaryDns;
-               **/
-                elDevice.AddBeforeSelf(el);
+
+
+                for (int j = 0; j < 1; j++)
+                {
+                    XElement en = new XElement(elDeviceNetwork);
+                en.Element("IPAddress").Value = devices[i].ipAddress;
+                en.Element("SubnetMask").Value = devices[i].subnetMask;
+                en.Element("DefaultGateway").Value = devices[i].defaultGateway;
+                en.Element("PrimaryDNS").Value = devices[i].primaryDns;
+              
+                    elDeviceNetwork.AddBeforeSelf(en);
+                }
+                    elDevice.AddBeforeSelf(el);
 
             }
 
+           elDevice.Elements().Where(el => el.Elements("DeviceID") == null).Remove();
+           
 
             xmlDocument.Save(@"C:\ProgramData\QSR Automation\ConnectSmart\ControlPointServer\Data\Devices100.xml");
         }

@@ -16,7 +16,7 @@ namespace ConsoleApp1
     {
         public string _id { get; set; }
         public string deviceId { get; set; }
-        public string description { get; set; }
+        public string decription { get; set; }
         public string deviceType { get; set; }
         public string ipAddress { get; set; }
         public string subnetMask { get; set; }
