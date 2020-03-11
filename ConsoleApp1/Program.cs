@@ -29,7 +29,7 @@ namespace ConsoleApp1
             {
                 XElement el = new XElement(elDevice);
                 el.Element("DeviceID").Value = devices[i].deviceId;
-                el.Element("Description").Value = devices[i].decription;
+                el.Element("Description").Value = devices[i].description;
                 el.Element("DeviceType").Value = devices[i].deviceType;
                 /**
                 el.Element("IPAddress").Value = devices[i].ipAddress;
