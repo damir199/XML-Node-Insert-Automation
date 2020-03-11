@@ -39,18 +39,6 @@ namespace ConsoleApp1
                **/
                 elDevice.AddBeforeSelf(el);
 
-                /** xmlDocument.Element("Devices").Add(
-                 new XElement("Device", new XAttribute("DeviceID", devices[i].deviceId),
-                     new XElement("Description", devices[i].decription),
-                     new XElement("DeviceType", devices[i].deviceType)
-                 ));**/
-                /**xmlDocument.Element("Network").Add(
-             
-                   new XElement("IPAddress", devices[i].ipAddress),
-                   new XElement("SubnetMask", devices[i].subnetMask),
-                   new XElement("DefaultGateway", devices[i].defaultGateway),
-                   new XElement("PrimaryDNS", devices[i].primaryDns)
-               );**/
             }
 
 
