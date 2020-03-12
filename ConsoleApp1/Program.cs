@@ -25,6 +25,7 @@ namespace ConsoleApp1
 
             var elDevice = xmlDocument.Descendants().First(d => d.Name == "Device");
             var elDeviceNetwork = xmlDocument.Descendants().First(n => n.Name == "Network");
+            
 
             for (int i = 0; i < devices.Count; i++)
             {
@@ -34,26 +35,32 @@ namespace ConsoleApp1
                 el.Element("DeviceType").Value = devices[i].deviceType;
 
 
-                for (int j = 0; j < 1; j++)
+               /** for (int j = 0; j < 1; j++)
                 {
-                    XElement en = new XElement(elDeviceNetwork);
-                en.Element("IPAddress").Value = devices[i].ipAddress;
-                en.Element("SubnetMask").Value = devices[i].subnetMask;
-                en.Element("DefaultGateway").Value = devices[i].defaultGateway;
-                en.Element("PrimaryDNS").Value = devices[i].primaryDns;
+                    //XElement en = new XElement(elDeviceNetwork);
+
+                    elDeviceNetwork.Element("IPAddress").Value = devices[i].ipAddress;
+                    elDeviceNetwork.Element("SubnetMask").Value = devices[i].subnetMask;
+                    elDeviceNetwork.Element("DefaultGateway").Value = devices[i].defaultGateway;
+                    elDeviceNetwork.Element("PrimaryDNS").Value = devices[i].primaryDns;
               
-                    elDeviceNetwork.AddBeforeSelf(en);
-                }
+                    elDeviceNetwork.Add(elDeviceNetwork);
+                }**/
+
+
                     elDevice.AddBeforeSelf(el);
 
             }
 
-           elDevice.Elements().Where(el => el.Elements("DeviceID") == null).Remove();
+            //removes my dummy device
+            elDevice.Remove();
            
 
             xmlDocument.Save(@"C:\ProgramData\QSR Automation\ConnectSmart\ControlPointServer\Data\Devices100.xml");
         }
-  
+
+ 
+
 
         public static string getData()
         {
