@@ -20,29 +20,40 @@ namespace ConsoleApp1
 
         public static void DeviceDetail()
         {
+
+            //Using the pre-made function to fetch data and deserialize to an object?
             RootObject account = JsonConvert.DeserializeObject<RootObject>(getData());
+            //USing XDocument to load my 'Devices.xml' for insertion of data.
             XDocument xmlDocument = XDocument.Load(@"C:\ProgramData\QSR Automation\ConnectSmart\ControlPointServer\Data\Devices.xml");
+            //create a variable 'devices' which is a list of all devices in the rootobject.
             var devices = new List<Device>(account.devices);
-
-
+            //create an 'elDevice' variable to hold the 'Device' Node within the XML.
             var elDevice = xmlDocument.Descendants().First(d => d.Name == "Device");
+            //For Loop to iterate through the number of devices that need adding to the file.
             for (int i = 0; i < devices.Count; i++)
             {
-                //XElement en = new XElement(elDeviceNetwork);
+                //Create a new XElement that is a copy of the 'elDevice' element found above. 
+                //This is to allow us to insert the data for N amount of devices in 'devices.count'.
                 XElement el = new XElement(elDevice);
+                //Insert the data required from the devices object using 'Element.value = ""' 
                 el.Element("DeviceID").Value = devices[i].deviceId;
                 el.Element("Description").Value = devices[i].decription;
                 el.Element("DeviceType").Value = devices[i].deviceType;
 
-                xmlDocument.XPathSelectElement("//Devices/Device/Network/IPAddress").Value = devices[i].ipAddress;
-                xmlDocument.XPathSelectElement("//Devices/Device/Network/SubnetMask").Value = devices[i].subnetMask;
-                xmlDocument.XPathSelectElement("//Devices/Device/Network/DefaultGateway").Value = devices[i].defaultGateway;
-                xmlDocument.XPathSelectElement("//Devices/Device/Network/PrimaryDNS").Value = devices[i].primaryDns;
+                //As Network is an inner element i use XPathSelectELement to find the required elements within
+                //the Device element we copied above -- el = new XElement(elDevice) -- and insert the data required
+                //from the RootObject.
+                el.XPathSelectElement("//Network/IPAddress").Value = devices[i].ipAddress;
+                el.XPathSelectElement("//Network/SubnetMask").Value = devices[i].subnetMask;
+                el.XPathSelectElement("//Network/DefaultGateway").Value = devices[i].defaultGateway;
+                el.XPathSelectElement("//Network/PrimaryDNS").Value = devices[i].primaryDns;
                 elDevice.AddBeforeSelf(el);
             }
-           
-         
 
+            //remove the dummy device used to insert the data.
+            elDevice.Remove();
+
+            //save document
             xmlDocument.Save(@"C:\ProgramData\QSR Automation\ConnectSmart\ControlPointServer\Data\Devices100.xml");
 
 
@@ -50,55 +61,11 @@ namespace ConsoleApp1
 
           
             
-            //removes my dummy device
-            //elDevice.Remove();
-
-
-        }
-
-        public static void NetworkDetail()
-        {
-            RootObject account = JsonConvert.DeserializeObject<RootObject>(getData());
-            XDocument xmlDocument = XDocument.Load(@"C:\ProgramData\QSR Automation\ConnectSmart\ControlPointServer\Data\Devices100.xml");
-            var devices = new List<Device>(account.devices);
-            var elDeviceNetwork = xmlDocument.Descendants().FirstOrDefault(n => n.Name == "Network");
-
-            int i = 0;
-            var elTest = xmlDocument.Descendants("Network").Where(x => x.Element(name: "SubnetMask").Value=="");
             
-            foreach(Device device in devices)
-            {
-                XElement en = new XElement(elDeviceNetwork);
-                en.Element("IPAddress").Value = devices[i].ipAddress;
-                en.Element("SubnetMask").Value = devices[i].subnetMask;
-                en.Element("DefaultGateway").Value = devices[i].defaultGateway;
-                en.Element("PrimaryDNS").Value = devices[i].primaryDns;
-                elDeviceNetwork.AddBeforeSelf(en);
-                i++;
-            }
-
-
-          /** for(int i = 0; i < devices.Count; i++) {
-                XElement en = new XElement(elDeviceNetwork);
-                for (int j = 0; j < 1; j++)
-                {
-                    
-
-                    en.Element("IPAddress").Value = devices[i].ipAddress;
-                    en.Element("SubnetMask").Value = devices[i].subnetMask;
-                    en.Element("DefaultGateway").Value = devices[i].defaultGateway;
-                    en.Element("PrimaryDNS").Value = devices[i].primaryDns;
-
-                    
-                }
-                elDeviceNetwork.AddBeforeSelf(en);
-
-            }**/
-            //elDeviceNetwork.Remove();
-            xmlDocument.Save(@"C:\ProgramData\QSR Automation\ConnectSmart\ControlPointServer\Data\Devices100.xml");
 
 
         }
+
         public static string getData()
         {
             var client = new RestClient("http://192.168.0.26:3000/api/v1/controlpoint/5d3252aa8322aa2434b9785e");
@@ -125,9 +92,7 @@ namespace ConsoleApp1
         static void Main(string[] args)
         {
             DeviceDetail();
-            //NetworkDetail();
-            
- 
+           
         }
     }
 }
